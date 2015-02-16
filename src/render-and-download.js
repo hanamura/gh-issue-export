@@ -75,7 +75,7 @@ module.exports = function(issues, dest, callback) {
         issue.title.trim().replace(/\s+/g, '-'));
       var filepath = path.join(dest, filename);
 
-      return renderFile('tmpl/issue.html', issue)
+      return renderFile(path.resolve(__dirname, '../tmpl/issue.html'), issue)
       .then(function(html) {
         var promises = [];
         var $ = cheerio.load(html);
