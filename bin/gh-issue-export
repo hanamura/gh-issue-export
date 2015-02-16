@@ -1,0 +1,55 @@
+#!/usr/bin/env node
+
+var argv = require('yargs')
+  .options('u', {
+    alias: 'user',
+    required: true,
+    describe: 'User name',
+  })
+  .options('r', {
+    alias: 'repository',
+    required: true,
+    describe: 'Repository name',
+  })
+  .options('o', {
+    alias: 'output',
+    required: true,
+    describe: 'Output directory',
+  })
+  .options('t', {
+    alias: 'token',
+    describe: 'Token (if you export issues from a private repository)',
+  })
+  .options('v', {
+    alias: 'verbose',
+    describe: 'Verbose output',
+    type: 'boolean',
+  })
+  .argv;
+
+var logger  = require('log4js').getLogger('gh-issue-export');
+
+if (argv.verbose) {
+  logger.setLevel('INFO');
+} else {
+  logger.setLevel('ERROR');
+}
+
+var exporter = require('../index');
+
+exporter.fetchIssues({
+  user:  argv.user,
+  repo:  argv.repository,
+  token: argv.token,
+})
+.then(function(issues) {
+  return exporter.renderAndDownload(issues, argv.output);
+})
+.then(function() {
+  logger.info('Done');
+  process.exit();
+})
+.catch(function(err) {
+  process.stderr.write(err.message + "\n");
+  process.exit(1);
+});
