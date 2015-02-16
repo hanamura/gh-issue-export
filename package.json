@@ -21,5 +21,16 @@
   },
   "bin": {
     "gh-issue-export": "./bin/gh-issue-export"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hanamura/gh-issue-export.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hanamura/gh-issue-export/issues"
+  },
+  "homepage": "https://github.com/hanamura/gh-issue-export",
+  "keywords": [
+    "github"
+  ]
 }
