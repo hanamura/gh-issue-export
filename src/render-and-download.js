@@ -9,7 +9,8 @@ var path    = require('path');
 var sprintf = require('sprintf-js').sprintf;
 var swig    = require('swig');
 
-var download = require('./download');
+var download    = require('./download');
+var findAndRead = require('./find-and-read');
 
 var readFile   = Promise.promisify(fs.readFile);
 var writeFile  = Promise.promisify(fs.writeFile);
@@ -43,9 +44,16 @@ module.exports = function(issues, dest, callback) {
   // render and download promise
   // ===========================
 
+  var styleGithubPaths    = [];
+  var styleNormalizePaths = [];
+  module.paths.forEach(function(modulePath) {
+    styleGithubPaths.push(path.join(modulePath, 'github-markdown-css/github-markdown.css'));
+    styleNormalizePaths.push(path.join(modulePath, 'normalize.css/normalize.css'));
+  });
+
   var promise = Promise.all([
-    readFile('node_modules/github-markdown-css/github-markdown.css'),
-    readFile('node_modules/normalize.css/normalize.css'),
+    findAndRead(styleGithubPaths),
+    findAndRead(styleNormalizePaths),
     makeDir(dest),
   ])
   .then(function(res) {
