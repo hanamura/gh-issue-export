@@ -72,7 +72,7 @@ module.exports = function(issues, dest, callback) {
       var filename = sprintf(
         '#%0' + String(digit) + 'd-%s.html',
         issue.number,
-        issue.title.trim().replace(/\s+/g, '-'));
+        issue.title.trim().replace(/\s+|\//g, '-'));
       var filepath = path.join(dest, filename);
 
       return renderFile(path.resolve(__dirname, '../tmpl/issue.html'), issue)
